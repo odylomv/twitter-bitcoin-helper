@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-hide',
+    selector: 'tbh-hide',
     templateUrl: './hide.component.html',
     styleUrls: ['./hide.component.scss'],
 })
