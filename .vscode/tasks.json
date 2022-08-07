@@ -19,6 +19,12 @@
                     }
                 }
             }
+        },
+        {
+            "label": "Deploy to GitHub Pages",
+            "type": "shell",
+            "command": "ng deploy --base-href=/twitter-bitcoin-helper/",
+            "group": "build"
         }
     ]
 }
