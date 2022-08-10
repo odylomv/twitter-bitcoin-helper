@@ -1,6 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { environment } from './../environments/environment';
+import { TwitterService } from './services/twitter.service';
 
 @Component({
     selector: 'tbh-root',
@@ -10,11 +9,18 @@ import { environment } from './../environments/environment';
 export class AppComponent {
     title = 'twitter-bitcoin-helper';
 
-    constructor(private http: HttpClient) {}
+    constructor(private twitterService: TwitterService) {}
 
     twitterLogin() {
-        this.http.get<string>(environment.twitterCallback).subscribe(url => {
-            window.location.href = url;
-        });
+        this.twitterService.authorize();
+    }
+
+    async auth_response() {
+        const access_token = await this.twitterService.get_access_token();
+        console.log(access_token);
+    }
+
+    async test() {
+        console.log(await this.twitterService.token_expired());
     }
 }

@@ -1,5 +1,8 @@
-<span>{{ title }} app is running!</span>
-
-<button (click)="twitterLogin()">Login with Twitter</button>
+<header>
+    <h1>{{ title }}</h1>
+    <button (click)="twitterLogin()">Login with Twitter</button>
+    <button (click)="auth_response()">Request access token</button>
+    <button (click)="test()">Test</button>
+</header>
 
 <router-outlet></router-outlet>
