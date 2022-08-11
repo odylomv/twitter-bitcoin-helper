@@ -4,8 +4,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { HomeComponent } from './home/home.component';
-import { HideComponent } from './hide/hide.component';
+import { HomeComponent } from './components/home/home.component';
+import { HideComponent } from './components/hide/hide.component';
 
 @NgModule({
     declarations: [AppComponent, HideComponent, HomeComponent],
