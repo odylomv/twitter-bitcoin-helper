@@ -6,10 +6,11 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './components/home/home.component';
 import { HideComponent } from './components/hide/hide.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [AppComponent, HideComponent, HomeComponent],
-    imports: [BrowserModule, HttpClientModule, AppRoutingModule],
+    imports: [BrowserModule, HttpClientModule, AppRoutingModule, ReactiveFormsModule],
     providers: [],
     bootstrap: [AppComponent],
 })

@@ -1,1 +1,12 @@
-<p>home works!</p>
+<form [formGroup]="hideForm" (ngSubmit)="onSubmit()">
+    <p>Tweet secret:</p>
+    <input type="text" id="tweet-secret" formControlName="tweetSecret" />
+
+    <p>Tweet image:</p>
+    <input type="file" accept=".png" id="tweet-image" formControlName="tweetImage" (change)="onFileChange($event)" />
+
+    <button type="submit">Submit</button>
+</form>
+
+<button (click)="showPreview()">Show Preview</button>
+<img [src]="image" width="200px" />
