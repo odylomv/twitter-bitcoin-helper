@@ -9,20 +9,26 @@ import { TwitterService } from 'src/app/services/twitter.service';
 })
 export class HomeComponent {
     image: any;
+    imageMethod: any;
 
     hideForm = new FormGroup({
         tweetSecret: new FormControl('', Validators.required),
-        tweetImage: new FormControl(null, Validators.required),
-        tweetImageSource: new FormControl<File | null>(null, Validators.required),
+        imageMethod: new FormControl<'cat' | 'local'>('cat', Validators.required),
+        tweetImage: new FormControl(null),
+        tweetImageSource: new FormControl<File | null>(null),
     });
 
     constructor(private twitterService: TwitterService) {}
 
     async onSubmit() {
         console.log(this.hideForm);
-        if (this.hideForm.controls.tweetSecret.value && this.hideForm.controls.tweetImageSource.value) {
+        if (
+            this.hideForm.controls.tweetSecret.value &&
+            (this.hideForm.controls.imageMethod.value || this.hideForm.controls.tweetImageSource.value)
+        ) {
             this.twitterService.postTweet(
                 this.hideForm.controls.tweetSecret.value,
+                this.hideForm.controls.imageMethod.value ?? 'cat',
                 this.hideForm.controls.tweetImageSource.value
             );
         }

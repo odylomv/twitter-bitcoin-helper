@@ -13,7 +13,7 @@ export class TwitterService {
 
     async authorize() {
         sessionStorage.removeItem('access_token');
-        const url = await lastValueFrom(this.http.get<string>(environment.twitterCallback + '/twitter_auth'));
+        const url = await lastValueFrom(this.http.get<string>(environment.serverUrl + '/twitter_auth'));
         window.location.href = url;
     }
 
@@ -34,7 +34,7 @@ export class TwitterService {
                 }
             }
 
-            const postUrl = environment.twitterCallback + '/twitter_token';
+            const postUrl = environment.serverUrl + '/twitter_token';
             this.token = await lastValueFrom(
                 this.http.post<TwitterAccessToken>(postUrl, { url: window.location.href })
             );
@@ -44,15 +44,17 @@ export class TwitterService {
         return this.token;
     }
 
-    async postTweet(secret: string, image: File) {
+    async postTweet(secret: string, method: 'cat' | 'local', image: File | null) {
         let formData = new FormData();
         formData.append('access_token', (await this.get_access_token()).access_token);
         formData.append('tweet_secret', secret);
-        formData.append('tweet_image', image);
+
+        formData.append('image_method', method);
+        if (method === 'local' && image) formData.append('tweet_image', image);
 
         formData.forEach(data => console.log(data));
 
-        const postUrl = environment.twitterCallback + '/twitter_post';
+        const postUrl = environment.serverUrl + '/twitter_post';
         const response = await lastValueFrom(this.http.post(postUrl, formData));
         console.log(response);
 

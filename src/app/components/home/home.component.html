@@ -2,8 +2,20 @@
     <p>Tweet secret:</p>
     <input type="text" id="tweet-secret" formControlName="tweetSecret" />
 
-    <p>Tweet image:</p>
-    <input type="file" accept=".png" id="tweet-image" formControlName="tweetImage" (change)="onFileChange($event)" />
+    <div>
+        <p>Tweet image:</p>
+        <input type="radio" formControlName="imageMethod" name="imageMethod" id="cat" value="cat" checked />
+        <label for="cat">MEOW!</label>
+        <input type="radio" formControlName="imageMethod" name="imageMethod" id="local" value="local" />
+        <label for="local">Upload image</label>
+        <input
+            *ngIf="hideForm.controls.imageMethod.value === 'local'"
+            type="file"
+            accept=".png"
+            id="tweet-image"
+            formControlName="tweetImage"
+            (change)="onFileChange($event)" />
+    </div>
 
     <button type="submit">Submit</button>
 </form>
