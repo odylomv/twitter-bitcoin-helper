@@ -8,6 +8,7 @@
         <label for="cat">MEOW!</label>
         <input type="radio" formControlName="imageMethod" name="imageMethod" id="local" value="local" />
         <label for="local">Upload image</label>
+
         <input
             *ngIf="hideForm.controls.imageMethod.value === 'local'"
             type="file"
@@ -15,10 +16,16 @@
             id="tweet-image"
             formControlName="tweetImage"
             (change)="onFileChange($event)" />
+
+        <button
+            *ngIf="hideForm.controls.imageMethod.value === 'local' && hideForm.controls.tweetImageSource.value"
+            type="button"
+            (click)="showPreview()">
+            Toggle Preview
+        </button>
     </div>
 
     <button type="submit">Submit</button>
 </form>
 
-<button (click)="showPreview()">Show Preview</button>
-<img [src]="image" width="200px" />
+<img *ngIf="image" [src]="image" width="200px" />

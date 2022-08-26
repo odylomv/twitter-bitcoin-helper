@@ -8,8 +8,7 @@ import { TwitterService } from 'src/app/services/twitter.service';
     styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
-    image: any;
-    imageMethod: any;
+    image: any = null;
 
     hideForm = new FormGroup({
         tweetSecret: new FormControl('', Validators.required),
@@ -44,7 +43,8 @@ export class HomeComponent {
     }
 
     showPreview() {
-        if (this.hideForm.controls.tweetImageSource.value) {
+        if (this.image !== null) this.image = null;
+        else if (this.hideForm.controls.tweetImageSource.value) {
             let reader = new FileReader();
             reader.onload = e => (this.image = e.target?.result);
             reader.readAsDataURL(this.hideForm.controls.tweetImageSource.value);
