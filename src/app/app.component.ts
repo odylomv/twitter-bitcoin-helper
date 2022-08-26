@@ -7,8 +7,6 @@ import { TwitterService } from './services/twitter.service';
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-    title = 'twitter-bitcoin-helper';
-
     constructor(private twitterService: TwitterService) {}
 
     twitterLogin() {
