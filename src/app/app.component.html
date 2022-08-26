@@ -1,6 +1,7 @@
 <header>
     <h1>Twitter Bitcoin Helper</h1>
     <button *ngIf="(getAuthStatus() | async) === false" (click)="twitterLogin()">Login with Twitter</button>
+    <button *ngIf="getAuthStatus() | async" (click)="logout()">Logout</button>
 </header>
 
 <main>

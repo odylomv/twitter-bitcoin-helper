@@ -21,11 +21,12 @@ export class TwitterService {
         this.token = token;
         this.authStatus$.next(token !== undefined);
 
+        // Clear old timer
+        if (this.lastTimer) this.lastTimer.unsubscribe();
+        this.lastTimer = null;
+
         // Automatically delete token when it expires
         if (this.token !== undefined) {
-            // Clear old timer
-            if (this.lastTimer) this.lastTimer.unsubscribe();
-
             // Store the subscription in case the token is updated before the previous one expires
             this.lastTimer = timer(this.token.expires_at * 1000 - Date.now()).subscribe(() => {
                 sessionStorage.removeItem('access_token');
@@ -41,6 +42,12 @@ export class TwitterService {
         sessionStorage.removeItem('access_token');
         // Redirect to Twitter
         window.location.href = await lastValueFrom(this.http.get<string>(environment.serverUrl + '/twitter_auth'));
+    }
+
+    logout() {
+        this.updateToken(undefined);
+        // Clear previous access token if it exists
+        sessionStorage.removeItem('access_token');
     }
 
     async requestAccessToken() {

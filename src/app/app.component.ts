@@ -13,6 +13,10 @@ export class AppComponent {
         this.twitterService.authorize();
     }
 
+    logout() {
+        this.twitterService.logout();
+    }
+
     getAuthStatus() {
         return this.twitterService.authStatus();
     }
