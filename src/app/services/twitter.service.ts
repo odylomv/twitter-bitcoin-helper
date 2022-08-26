@@ -1,58 +1,68 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, lastValueFrom, Subscription, timer } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { lastValueFrom } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
 })
 export class TwitterService {
-    private token: TwitterAccessToken | undefined;
+    private token: TwitterAccessToken | undefined = undefined;
+    private lastTimer: Subscription | null = null;
+    private authStatus$ = new BehaviorSubject(false);
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {
+        // Check if the access token was previously saved in session storage
+        const tokenString = sessionStorage.getItem('access_token');
+        if (tokenString) this.updateToken(JSON.parse(tokenString));
+    }
+
+    private updateToken(token: TwitterAccessToken | undefined) {
+        this.token = token;
+        this.authStatus$.next(token !== undefined);
+
+        // Automatically delete token when it expires
+        if (this.token !== undefined) {
+            // Clear old timer
+            if (this.lastTimer) this.lastTimer.unsubscribe();
+
+            // Store the subscription in case the token is updated before the previous one expires
+            this.lastTimer = timer(this.token.expires_at * 1000 - Date.now()).subscribe(() => {
+                sessionStorage.removeItem('access_token');
+                this.updateToken(undefined);
+            });
+        }
+    }
+
+    authStatus = () => this.authStatus$.asObservable();
 
     async authorize() {
+        // Clear previous access token if it exists
         sessionStorage.removeItem('access_token');
-        const url = await lastValueFrom(this.http.get<string>(environment.serverUrl + '/twitter_auth'));
-        window.location.href = url;
+        // Redirect to Twitter
+        window.location.href = await lastValueFrom(this.http.get<string>(environment.serverUrl + '/twitter_auth'));
     }
 
-    async token_expired() {
-        return this.token === undefined || Date.now() / 1000 >= this.token.expires_at;
-    }
+    async requestAccessToken() {
+        if (this.token !== undefined) return; // Token exists
 
-    async get_access_token() {
-        if (this.token === undefined) {
-            const token_string = sessionStorage.getItem('access_token');
-
-            if (token_string != null) {
-                this.token = JSON.parse(token_string) as TwitterAccessToken;
-
-                const expired = await this.token_expired();
-                if (!expired) {
-                    return this.token;
-                }
-            }
-
-            const postUrl = environment.serverUrl + '/twitter_token';
-            this.token = await lastValueFrom(
-                this.http.post<TwitterAccessToken>(postUrl, { url: window.location.href })
-            );
-
-            sessionStorage.setItem('access_token', JSON.stringify(this.token));
-        }
-        return this.token;
+        const postUrl = environment.serverUrl + '/twitter_token';
+        this.updateToken(
+            await lastValueFrom(this.http.post<TwitterAccessToken>(postUrl, { url: window.location.href }))
+        );
+        // Save token to session storage
+        sessionStorage.setItem('access_token', JSON.stringify(this.token));
     }
 
     async postTweet(secret: string, method: 'cat' | 'local', image: File | null) {
+        if (this.token === undefined) return;
+
         let formData = new FormData();
-        formData.append('access_token', (await this.get_access_token()).access_token);
+        formData.append('access_token', this.token.access_token);
         formData.append('tweet_secret', secret);
-
         formData.append('image_method', method);
-        if (method === 'local' && image) formData.append('tweet_image', image);
 
-        formData.forEach(data => console.log(data));
+        if (method === 'local' && image) formData.append('tweet_image', image);
 
         const postUrl = environment.serverUrl + '/twitter_post';
         const response = await lastValueFrom(this.http.post(postUrl, formData));
@@ -63,9 +73,9 @@ export class TwitterService {
 }
 
 interface TwitterAccessToken {
-    access_token: string;
-    expires_at: number;
-    expires_in: number;
-    scope: Array<string>;
-    token_type: string;
+    readonly access_token: string;
+    readonly expires_at: number;
+    readonly expires_in: number;
+    readonly scope: Array<string>;
+    readonly token_type: string;
 }

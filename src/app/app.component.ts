@@ -15,12 +15,7 @@ export class AppComponent {
         this.twitterService.authorize();
     }
 
-    async auth_response() {
-        const access_token = await this.twitterService.get_access_token();
-        console.log(access_token);
-    }
-
-    async test() {
-        console.log(await this.twitterService.token_expired());
+    getAuthStatus() {
+        return this.twitterService.authStatus();
     }
 }
