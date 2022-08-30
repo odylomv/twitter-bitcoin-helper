@@ -1,31 +1,50 @@
-<form [formGroup]="hideForm" (ngSubmit)="onSubmit()">
-    <p>Tweet secret:</p>
-    <input type="text" id="tweet-secret" formControlName="tweetSecret" />
-
+<div>
     <div>
-        <p>Tweet image:</p>
-        <input type="radio" formControlName="imageMethod" name="imageMethod" id="cat" value="cat" checked />
-        <label for="cat">MEOW!</label>
-        <input type="radio" formControlName="imageMethod" name="imageMethod" id="local" value="local" />
-        <label for="local">Upload image</label>
+        <h2>Upload tweet</h2>
 
-        <input
-            *ngIf="hideForm.controls.imageMethod.value === 'local'"
-            type="file"
-            accept=".png"
-            id="tweet-image"
-            formControlName="tweetImage"
-            (change)="onFileChange($event)" />
+        <form [formGroup]="hideForm" (ngSubmit)="hideFormSubmit()">
+            <p>Tweet secret:</p>
+            <input type="text" id="tweetSecret" formControlName="tweetSecret" />
 
-        <button
-            *ngIf="hideForm.controls.imageMethod.value === 'local' && hideForm.controls.tweetImageSource.value"
-            type="button"
-            (click)="showPreview()">
-            Toggle Preview
-        </button>
+            <div>
+                <p>Tweet image:</p>
+                <input type="radio" formControlName="imageMethod" name="imageMethod" id="cat" value="cat" checked />
+                <label for="cat">MEOW!</label>
+                <input type="radio" formControlName="imageMethod" name="imageMethod" id="local" value="local" />
+                <label for="local">Upload image</label>
+
+                <input
+                    *ngIf="hideForm.controls.imageMethod.value === 'local'"
+                    type="file"
+                    accept=".png"
+                    id="tweetImage"
+                    formControlName="tweetImage"
+                    (change)="onFileChange($event)" />
+
+                <button
+                    *ngIf="hideForm.controls.imageMethod.value === 'local' && hideForm.controls.tweetImageSource.value"
+                    type="button"
+                    (click)="showPreview()">
+                    Toggle Preview
+                </button>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <img *ngIf="image" [src]="image" width="200px" />
     </div>
 
-    <button type="submit">Submit</button>
-</form>
+    <div>
+        <h2>Retrieve secret</h2>
 
-<img *ngIf="image" [src]="image" width="200px" />
+        <form [formGroup]="retrieveForm" (ngSubmit)="retrieveFormSubmit()">
+            <div>
+                <p>Tweet URL/ID:</p>
+                <input type="text" id="tweetId" formControlName="tweetId" />
+            </div>
+
+            <button type="submit">Search reply</button>
+        </form>
+    </div>
+</div>

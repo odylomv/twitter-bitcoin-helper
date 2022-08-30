@@ -17,19 +17,25 @@ export class HomeComponent {
         tweetImageSource: new FormControl<File | null>(null),
     });
 
+    retrieveForm = new FormGroup({
+        tweetId: new FormControl<string>('', Validators.required),
+    });
+
     constructor(private twitterService: TwitterService) {}
 
-    async onSubmit() {
+    async hideFormSubmit() {
         console.log(this.hideForm);
         if (
             this.hideForm.controls.tweetSecret.value &&
             (this.hideForm.controls.imageMethod.value || this.hideForm.controls.tweetImageSource.value)
         ) {
-            this.twitterService.postTweet(
+            const response = await this.twitterService.postTweet(
                 this.hideForm.controls.tweetSecret.value,
                 this.hideForm.controls.imageMethod.value ?? 'cat',
                 this.hideForm.controls.tweetImageSource.value
             );
+
+            this.retrieveForm.controls.tweetId.setValue(response.id);
         }
     }
 
@@ -48,6 +54,14 @@ export class HomeComponent {
             let reader = new FileReader();
             reader.onload = e => (this.image = e.target?.result);
             reader.readAsDataURL(this.hideForm.controls.tweetImageSource.value);
+        }
+    }
+
+    async retrieveFormSubmit() {
+        const id = this.retrieveForm.controls.tweetId.value;
+        if (id) {
+            const response = await this.twitterService.searchTweet(id);
+            console.log(response);
         }
     }
 }

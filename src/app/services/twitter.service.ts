@@ -62,7 +62,7 @@ export class TwitterService {
     }
 
     async postTweet(secret: string, method: 'cat' | 'local', image: File | null) {
-        if (this.token === undefined) return;
+        if (this.token === undefined) throw new Error('User not authorized');
 
         let formData = new FormData();
         formData.append('access_token', this.token.access_token);
@@ -72,7 +72,17 @@ export class TwitterService {
         if (method === 'local' && image) formData.append('tweet_image', image);
 
         const postUrl = environment.serverUrl + '/twitter_post';
-        const response = await lastValueFrom(this.http.post(postUrl, formData));
+        const response = await lastValueFrom(this.http.post<Tweet>(postUrl, formData));
+        console.log(response);
+
+        return response;
+    }
+
+    async searchTweet(id: string) {
+        if (this.token === undefined) throw new Error('User not authorized');
+
+        const postUrl = environment.serverUrl + '/twitter_search/' + id;
+        const response = await lastValueFrom(this.http.post(postUrl, { access_token: this.token.access_token }));
         console.log(response);
 
         return response;
@@ -85,4 +95,9 @@ interface TwitterAccessToken {
     readonly expires_in: number;
     readonly scope: Array<string>;
     readonly token_type: string;
+}
+
+export interface Tweet {
+    readonly id: string;
+    readonly text: string;
 }
