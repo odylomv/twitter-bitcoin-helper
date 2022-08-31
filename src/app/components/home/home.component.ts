@@ -15,6 +15,7 @@ export class HomeComponent {
         imageMethod: new FormControl<'cat' | 'local'>('cat', Validators.required),
         tweetImage: new FormControl(null),
         tweetImageSource: new FormControl<File | null>(null),
+        blockchain: new FormControl<'main' | 'test'>('test', Validators.required),
     });
 
     retrieveForm = new FormGroup({
@@ -32,7 +33,8 @@ export class HomeComponent {
             const response = await this.twitterService.postTweet(
                 this.hideForm.controls.tweetSecret.value,
                 this.hideForm.controls.imageMethod.value ?? 'cat',
-                this.hideForm.controls.tweetImageSource.value
+                this.hideForm.controls.tweetImageSource.value,
+                this.hideForm.controls.blockchain.value ?? 'test'
             );
 
             this.retrieveForm.controls.tweetId.setValue(response.id);

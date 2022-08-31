@@ -61,13 +61,14 @@ export class TwitterService {
         sessionStorage.setItem('access_token', JSON.stringify(this.token));
     }
 
-    async postTweet(secret: string, method: 'cat' | 'local', image: File | null) {
+    async postTweet(secret: string, method: 'cat' | 'local', image: File | null, blockchain: 'main' | 'test') {
         if (this.token === undefined) throw new Error('User not authorized');
 
         let formData = new FormData();
         formData.append('access_token', this.token.access_token);
         formData.append('tweet_secret', secret);
         formData.append('image_method', method);
+        formData.append('blockchain', blockchain);
 
         if (method === 'local' && image) formData.append('tweet_image', image);
 
