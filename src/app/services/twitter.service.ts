@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, lastValueFrom, Subscription, timer } from 'rxjs';
+import { BehaviorSubject, lastValueFrom, retry, Subscription, timer } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -82,7 +82,9 @@ export class TwitterService {
         if (this.token === undefined) throw new Error('User not authorized');
 
         const postUrl = environment.serverUrl + '/twitter_search/' + id;
-        const response = await lastValueFrom(this.http.post(postUrl, { access_token: this.token.access_token }));
+        const response = await lastValueFrom(
+            this.http.post(postUrl, { access_token: this.token.access_token }).pipe(retry({ count: 3, delay: 10000 }))
+        );
         console.log(response);
 
         return response;

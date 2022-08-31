@@ -60,8 +60,7 @@ export class HomeComponent {
     async retrieveFormSubmit() {
         const id = this.retrieveForm.controls.tweetId.value;
         if (id) {
-            const response = await this.twitterService.searchTweet(id);
-            console.log(response);
+            await this.twitterService.searchTweet(id);
         }
     }
 }
