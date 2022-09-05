@@ -22,7 +22,7 @@ export class HomeComponent {
         tweetId: new FormControl<string>('', Validators.required),
     });
 
-    constructor(private twitterService: TwitterService) {}
+    constructor(public twitterService: TwitterService) {}
 
     async hideFormSubmit() {
         console.log(this.hideForm);

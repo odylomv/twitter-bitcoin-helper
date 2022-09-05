@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { TwitterService } from './services/twitter.service';
 
 @Component({
     selector: 'tbh-root',
@@ -7,17 +6,5 @@ import { TwitterService } from './services/twitter.service';
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-    constructor(private twitterService: TwitterService) {}
-
-    twitterLogin() {
-        this.twitterService.authorize();
-    }
-
-    logout() {
-        this.twitterService.logout();
-    }
-
-    getAuthStatus() {
-        return this.twitterService.authStatus();
-    }
+    constructor() {}
 }

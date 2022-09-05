@@ -1,4 +1,9 @@
 <div>
+    <button *ngIf="(twitterService.authStatus() | async) === false" (click)="twitterService.authorize()">
+        Login with Twitter
+    </button>
+    <button *ngIf="twitterService.authStatus() | async" (click)="twitterService.logout()">Logout</button>
+
     <div>
         <h2>Upload tweet</h2>
 
