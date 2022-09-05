@@ -5,11 +5,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './components/home/home.component';
-import { HideComponent } from './components/hide/hide.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TransactionMakerComponent } from './components/transaction-maker/transaction-maker.component';
 
 @NgModule({
-    declarations: [AppComponent, HideComponent, HomeComponent],
+    declarations: [AppComponent, HomeComponent, TransactionMakerComponent],
     imports: [BrowserModule, HttpClientModule, AppRoutingModule, ReactiveFormsModule],
     providers: [],
     bootstrap: [AppComponent],
