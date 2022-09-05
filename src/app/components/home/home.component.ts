@@ -1,5 +1,7 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { map, Observable, shareReplay } from 'rxjs';
 import { TwitterService } from 'src/app/services/twitter.service';
 
 @Component({
@@ -8,6 +10,11 @@ import { TwitterService } from 'src/app/services/twitter.service';
     styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
+    isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.HandsetPortrait).pipe(
+        map(result => result.matches),
+        shareReplay()
+    );
+
     image: any = null;
 
     hideForm = new FormGroup({
@@ -22,7 +29,7 @@ export class HomeComponent {
         tweetId: new FormControl<string>('', Validators.required),
     });
 
-    constructor(public twitterService: TwitterService) {}
+    constructor(public twitterService: TwitterService, private breakpointObserver: BreakpointObserver) {}
 
     async hideFormSubmit() {
         console.log(this.hideForm);

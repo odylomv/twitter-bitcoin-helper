@@ -1,63 +1,121 @@
-<div>
-    <button *ngIf="(twitterService.authStatus() | async) === false" (click)="twitterService.authorize()">
-        Login with Twitter
-    </button>
-    <button *ngIf="twitterService.authStatus() | async" (click)="twitterService.logout()">Logout</button>
-
-    <div>
-        <h2>Upload tweet</h2>
-
-        <form [formGroup]="hideForm" (ngSubmit)="hideFormSubmit()">
-            <p>Tweet secret:</p>
-            <input type="text" id="tweetSecret" formControlName="tweetSecret" />
-
-            <div>
-                <p>Tweet image:</p>
-                <input type="radio" formControlName="imageMethod" name="imageMethod" id="cat" value="cat" checked />
-                <label for="cat">MEOW!</label>
-                <input type="radio" formControlName="imageMethod" name="imageMethod" id="local" value="local" />
-                <label for="local">Upload image</label>
-
-                <input
-                    *ngIf="hideForm.controls.imageMethod.value === 'local'"
-                    type="file"
-                    accept=".png"
-                    id="tweetImage"
-                    formControlName="tweetImage"
-                    (change)="onFileChange($event)" />
-
-                <button
-                    *ngIf="hideForm.controls.imageMethod.value === 'local' && hideForm.controls.tweetImageSource.value"
-                    type="button"
-                    (click)="showPreview()">
-                    Toggle Preview
-                </button>
-            </div>
-
-            <div>
-                <p>Blockchain:</p>
-                <input type="radio" formControlName="blockchain" name="blockchain" id="main" value="main" />
-                <label for="main">Mainnet</label>
-                <input type="radio" formControlName="blockchain" name="blockchain" id="test" value="test" checked />
-                <label for="test">Testnet</label>
-            </div>
-
-            <button type="submit">Submit</button>
-        </form>
-
-        <img *ngIf="image" [src]="image" width="200px" />
+<div class="content">
+    <div class="center">
+        <button
+            mat-raised-button
+            class="twitter"
+            *ngIf="(twitterService.authStatus() | async) === false"
+            (click)="twitterService.authorize()">
+            <mat-icon svgIcon="twitter"></mat-icon>
+            Login with Twitter
+        </button>
+        <button
+            mat-raised-button
+            color="warn"
+            *ngIf="twitterService.authStatus() | async"
+            (click)="twitterService.logout()">
+            <mat-icon svgIcon="twitter"></mat-icon>
+            Logout
+        </button>
     </div>
 
-    <div>
-        <h2>Retrieve secret</h2>
+    <div class="grid" [class]="(isHandset$ | async) ? 'grid-mobile' : 'grid-desktop'">
+        <mat-card class="cards">
+            <mat-card-title>Upload tweet</mat-card-title>
 
-        <form [formGroup]="retrieveForm" (ngSubmit)="retrieveFormSubmit()">
-            <div>
-                <p>Tweet URL/ID:</p>
-                <input type="text" id="tweetId" formControlName="tweetId" />
-            </div>
+            <mat-card-content>
+                <form [formGroup]="hideForm">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tweet Secret</mat-label>
+                        <textarea matInput id="tweetSecret" formControlName="tweetSecret"></textarea>
+                        <mat-error>Invalid secret</mat-error>
+                    </mat-form-field>
 
-            <button type="submit">Search reply</button>
-        </form>
+                    <div>
+                        <label id="image-method-label" class="radio-label">Tweet image:</label>
+                        <div class="radio-group">
+                            <mat-radio-group formControlName="imageMethod" aria-labelledby="image-method-label">
+                                <mat-radio-button name="imageMethod" id="cat" value="cat" checked>
+                                    Random Cat Image
+                                </mat-radio-button>
+
+                                <mat-radio-button name="imageMethod" id="local" value="local">
+                                    Upload Image
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+
+                        <input
+                            *ngIf="hideForm.controls.imageMethod.value === 'local'"
+                            type="file"
+                            accept=".png"
+                            id="tweetImage"
+                            formControlName="tweetImage"
+                            (change)="onFileChange($event)" />
+
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            *ngIf="
+                                hideForm.controls.imageMethod.value === 'local' &&
+                                hideForm.controls.tweetImageSource.value
+                            "
+                            type="button"
+                            (click)="showPreview()">
+                            Toggle Preview
+                        </button>
+                        <div>
+                            <img *ngIf="image" [src]="image" width="200px" />
+                        </div>
+                    </div>
+
+                    <label id="blockchain-label" class="radio-label">Blockchain:</label>
+                    <div class="radio-group">
+                        <mat-radio-group formControlName="blockchain" aria-labelledby="blockchain-label">
+                            <mat-radio-button name="blockchain" id="main" value="main"> Mainnet </mat-radio-button>
+
+                            <mat-radio-button name="blockchain" id="test" value="test" checked>
+                                Testnet
+                            </mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </form>
+            </mat-card-content>
+
+            <mat-card-actions>
+                <button
+                    mat-flat-button
+                    color="accent"
+                    type="submit"
+                    (click)="hideFormSubmit()"
+                    [disabled]="(twitterService.authStatus() | async) === false">
+                    Submit
+                </button>
+            </mat-card-actions>
+        </mat-card>
+
+        <mat-card class="cards">
+            <mat-card-title>Retrieve secret</mat-card-title>
+
+            <mat-card-content>
+                <form [formGroup]="retrieveForm">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tweet URL/ID:</mat-label>
+                        <input matInput type="text" id="tweetId" formControlName="tweetId" />
+                        <mat-error>Invalid URL/ID</mat-error>
+                    </mat-form-field>
+                </form>
+            </mat-card-content>
+
+            <mat-card-actions>
+                <button
+                    mat-flat-button
+                    color="accent"
+                    type="submit"
+                    (click)="retrieveFormSubmit()"
+                    [disabled]="(twitterService.authStatus() | async) === false">
+                    Search reply
+                </button>
+            </mat-card-actions>
+        </mat-card>
     </div>
 </div>
