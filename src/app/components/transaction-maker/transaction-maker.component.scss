@@ -1,0 +1,17 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card {
+    margin: 32px;
+    padding: 32px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    padding-top: 32px;
+}
