@@ -20,6 +20,7 @@ export class AppComponent {
         private matIconRegistry: MatIconRegistry,
         private sanitizer: DomSanitizer
     ) {
+        this.matIconRegistry.addSvgIcon('menu', this.sanitizer.bypassSecurityTrustResourceUrl('assets/menu.svg'));
         this.matIconRegistry.addSvgIcon('twitter', this.sanitizer.bypassSecurityTrustResourceUrl('assets/twitter.svg'));
     }
 }
