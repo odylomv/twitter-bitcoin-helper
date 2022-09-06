@@ -1,13 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
-import { TransactionMakerComponent } from './components/transaction-maker/transaction-maker.component';
-import { TwitterGuard } from './guards/twitter.guard';
 
 const routes: Routes = [
-    { path: '', component: HomeComponent, canActivate: [TwitterGuard] },
-    { path: 'transaction-maker', component: TransactionMakerComponent },
-    { path: '**', component: HomeComponent },
+    {
+        path: '',
+        loadChildren: () => import('./features/home/home.module').then(m => m.HomeModule),
+    },
+    {
+        path: 'transaction-maker',
+        loadChildren: () =>
+            import('./features/transaction-maker/transaction-maker.module').then(m => m.TransactionMakerModule),
+    },
+    { path: '**', loadChildren: () => import('./features/home/home.module').then(m => m.HomeModule) },
 ];
 
 @NgModule({
