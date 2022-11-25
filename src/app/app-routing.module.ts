@@ -6,12 +6,7 @@ const routes: Routes = [
     {
         path: '',
         loadChildren: () => import('./features/home/home.module').then(m => m.HomeModule),
-        canActivate: [TwitterGuard]
-    },
-    {
-        path: 'transaction-maker',
-        loadChildren: () =>
-            import('./features/transaction-maker/transaction-maker.module').then(m => m.TransactionMakerModule),
+        canActivate: [TwitterGuard],
     },
     { path: '**', loadChildren: () => import('./features/home/home.module').then(m => m.HomeModule) },
 ];
