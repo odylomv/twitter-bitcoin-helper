@@ -17,12 +17,12 @@
     </button>
 
     <div [class.grid-desktop]="(isHandset$ | async) === false">
-        <mat-card class="card">
+        <mat-card appearance="outlined" class="card">
             <mat-card-title>Upload tweet</mat-card-title>
 
             <mat-card-content>
                 <form [formGroup]="hideForm">
-                    <label for="tweetSecret" class="mat-body-2">Tweet Secret:</label>
+                    <label for="tweetSecret" class="mat-subtitle-2">Tweet Secret:</label>
 
                     <mat-form-field appearance="fill">
                         <textarea
@@ -33,7 +33,7 @@
                         <mat-error>Invalid secret</mat-error>
                     </mat-form-field>
 
-                    <label id="image-method-label" class="mat-body-2">Tweet image:</label>
+                    <label id="image-method-label" class="mat-subtitle-2">Tweet image:</label>
                     <mat-radio-group formControlName="imageMethod" aria-labelledby="image-method-label">
                         <mat-radio-button name="imageMethod" id="cat" value="cat" checked>
                             Random Cat Image
@@ -63,7 +63,7 @@
 
                     <img *ngIf="image" [src]="image" width="200px" />
 
-                    <label id="blockchain-label" class="mat-body-2">Blockchain:</label>
+                    <label id="blockchain-label" class="mat-subtitle-2">Blockchain:</label>
                     <mat-radio-group formControlName="blockchain" aria-labelledby="blockchain-label">
                         <mat-radio-button name="blockchain" id="main" value="main">Mainnet</mat-radio-button>
 
@@ -84,12 +84,12 @@
             </mat-card-actions>
         </mat-card>
 
-        <mat-card class="card">
+        <mat-card appearance="outlined" class="card">
             <mat-card-title>Retrieve secret</mat-card-title>
 
             <mat-card-content>
                 <form [formGroup]="retrieveForm">
-                    <label class="mat-body-2">Tweet ID/URL:</label>
+                    <label class="mat-subtitle-2">Tweet ID/URL:</label>
                     <mat-form-field appearance="fill" floatLabel="always">
                         <mat-label>ID/URL</mat-label>
                         <input matInput type="text" id="tweetId" formControlName="tweetId" />
