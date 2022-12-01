@@ -12,18 +12,18 @@ import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
 
 @NgModule({
-    declarations: [HomeComponent],
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        LayoutModule,
-        MatButtonModule,
-        MatIconModule,
-        MatCardModule,
-        MatRadioModule,
-        MatFormFieldModule,
-        MatInputModule,
-        HomeRoutingModule,
-    ],
+  declarations: [HomeComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    LayoutModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatRadioModule,
+    MatFormFieldModule,
+    MatInputModule,
+    HomeRoutingModule,
+  ],
 })
 export class HomeModule {}

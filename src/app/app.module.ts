@@ -12,19 +12,19 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 @NgModule({
-    declarations: [AppComponent],
-    imports: [
-        BrowserAnimationsModule,
-        HttpClientModule,
-        AppRoutingModule,
-        LayoutModule,
-        MatToolbarModule,
-        MatButtonModule,
-        MatSidenavModule,
-        MatIconModule,
-        MatListModule,
-    ],
-    providers: [],
-    bootstrap: [AppComponent],
+  declarations: [AppComponent],
+  imports: [
+    BrowserAnimationsModule,
+    HttpClientModule,
+    AppRoutingModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
+  ],
+  providers: [],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

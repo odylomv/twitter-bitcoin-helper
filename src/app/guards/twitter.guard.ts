@@ -3,18 +3,18 @@ import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 import { TwitterService } from '../services/twitter.service';
 
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
 export class TwitterGuard implements CanActivate {
-    constructor(private twitterService: TwitterService, private router: Router) {}
+  constructor(private twitterService: TwitterService, private router: Router) {}
 
-    canActivate(route: ActivatedRouteSnapshot): boolean {
-        if (route.queryParams['state']) {
-            // Clear query params after getting the access token
-            this.twitterService.requestAccessToken();
-            this.router.navigate([]);
-        }
-
-        return true;
+  canActivate(route: ActivatedRouteSnapshot): boolean {
+    if (route.queryParams['state']) {
+      // Clear query params after getting the access token
+      this.twitterService.requestAccessToken();
+      this.router.navigate([]);
     }
+
+    return true;
+  }
 }
