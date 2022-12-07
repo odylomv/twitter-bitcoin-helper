@@ -2,13 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'tbh-create-modal',
+  selector: 'tbh-read-modal',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './create-modal.component.html',
-  styleUrls: ['./create-modal.component.scss'],
+  templateUrl: './read-modal.component.html',
+  styleUrls: ['./read-modal.component.scss'],
 })
-export class CreateModalComponent {
+export class ReadModalComponent {
   @Input()
   onClose = () => {};
 }

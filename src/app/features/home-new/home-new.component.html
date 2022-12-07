@@ -44,9 +44,9 @@
     </h2>
 
     <div
-      class="min-h-72 flex w-screen max-w-[500px] flex-col items-center justify-evenly gap-2 py-8 px-4 md:max-w-[800px] md:flex-row md:gap-4">
+      class="min-h-72 flex w-screen max-w-lg flex-col items-center justify-evenly gap-2 py-8 px-4 md:max-w-3xl md:flex-row md:gap-4">
       <button
-        (click)="setLoginModal(true)"
+        (click)="setCreateModal(true)"
         class="flex h-full w-full transform cursor-pointer flex-col items-center justify-center gap-4 rounded-xl bg-neutral-700 p-4 shadow-2xl transition duration-200 hover:scale-105">
         <h3 class="text-2xl font-semibold text-neutral-200">Create Tweet</h3>
         <p class="text-neutral-300">Create a simple tweet to hide your transaction data</p>
@@ -55,6 +55,7 @@
       <span class="text-lg font-semibold">or</span>
 
       <button
+        (click)="setReadModal(true)"
         class="flex h-full w-full transform cursor-pointer flex-col items-center justify-center gap-4 rounded-xl bg-neutral-700 p-4 shadow-2xl transition duration-200 hover:scale-105">
         <h3 class="text-2xl font-semibold text-neutral-200">Read Tweet Secret</h3>
         <p class="text-neutral-300">Read the content of a reply tweet sent by our bot</p>
@@ -71,3 +72,5 @@
 </div>
 
 <tbh-login-modal *ngIf="loginModalOpen" [onClose]="closeLoginModal"></tbh-login-modal>
+<tbh-create-modal *ngIf="createModalOpen" [onClose]="closeCreateModal"></tbh-create-modal>
+<tbh-read-modal *ngIf="readModalOpen" [onClose]="closeReadModal"></tbh-read-modal>
