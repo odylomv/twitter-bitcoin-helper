@@ -12,12 +12,13 @@
             <div class="mt-0 text-center sm:text-left">
               <h3 class="text-3xl font-bold leading-6 text-neutral-200" id="modal-title">Create Tweet</h3>
 
-              <form action="" class="mt-8 flex flex-col gap-4">
+              <form [formGroup]="createForm" action="" class="mt-8 flex flex-col gap-4">
                 <div>
-                  <label for="about" class="block text-xl font-medium text-neutral-300">Tweet secret</label>
+                  <label for="tweet-secret" class="block text-xl font-medium text-neutral-300">Tweet secret</label>
                   <div class="mt-4">
                     <textarea
-                      id="about"
+                      id="tweet-secret"
+                      formControlName="tweetSecret"
                       name="about"
                       rows="5"
                       class="mt-1 block w-full rounded-md bg-neutral-700 p-2 text-neutral-300 placeholder-neutral-400 shadow-lg sm:text-sm"
@@ -32,14 +33,13 @@
                     <li>
                       <input
                         type="radio"
-                        id="hosting-small"
-                        name="hosting"
-                        value="hosting-small"
+                        id="img-local"
+                        value="local"
+                        formControlName="imageMethod"
                         class="peer absolute h-0 w-0 opacity-0"
-                        checked
                         required />
                       <label
-                        for="hosting-small"
+                        for="img-local"
                         class="inline-flex w-full cursor-pointer items-center justify-center rounded-xl border border-neutral-700 bg-neutral-800 p-5 text-center text-neutral-400 hover:bg-neutral-700 hover:text-neutral-300 peer-checked:border-blue-400 peer-checked:text-blue-400 peer-focus:ring-2 peer-focus:ring-white">
                         <div class="block">
                           <div class="w-full text-lg font-semibold">Your Own Image</div>
@@ -50,12 +50,13 @@
                     <li>
                       <input
                         type="radio"
-                        id="hosting-big"
-                        name="hosting"
-                        value="hosting-big"
+                        id="img-cat"
+                        value="cat"
+                        formControlName="imageMethod"
+                        checked
                         class="peer absolute h-0 w-0 opacity-0" />
                       <label
-                        for="hosting-big"
+                        for="img-cat"
                         class="inline-flex w-full cursor-pointer items-center justify-center rounded-xl border border-neutral-700 bg-neutral-800 p-5 text-center text-neutral-400 hover:bg-neutral-700 hover:text-neutral-300 peer-checked:border-amber-400 peer-checked:text-amber-400 peer-focus:ring-2 peer-focus:ring-white">
                         <div class="block">
                           <div class="w-full text-lg font-semibold">Random Cat Image</div>
@@ -66,12 +67,14 @@
                   </ul>
                 </div>
 
-                <div *ngIf="true">
+                <div *ngIf="createForm.controls.imageMethod.value === 'local'">
                   <label class="mb-2 block text-lg font-medium text-neutral-300" for="file_input">Upload file</label>
                   <input
                     class="mt-4 block w-full rounded-xl bg-neutral-600 text-sm text-neutral-300 placeholder-neutral-400 file:mr-2 file:cursor-pointer file:border-none file:bg-neutral-700 file:py-2 file:px-4 file:text-neutral-200 file:hover:bg-neutral-500"
                     aria-describedby="file_input_help"
                     id="file_input"
+                    formControlName="tweetImage"
+                    (change)="onFileChange($event)"
                     type="file" />
                   <p class="mt-2 text-xs text-neutral-500" id="file_input_help">Supported image types: PNG</p>
                 </div>
@@ -83,8 +86,8 @@
                       <input
                         id="mainnet"
                         type="radio"
-                        value=""
-                        name="bitcoin-network"
+                        value="main"
+                        formControlName="blockchain"
                         class="h-5 w-5 border-neutral-600 bg-neutral-700 text-amber-600 ring-offset-neutral-800 focus:ring-1 focus:ring-amber-600" />
                       <label for="mainnet" class="ml-2 text-lg font-medium text-neutral-300">Mainnet</label>
                     </div>
@@ -93,8 +96,8 @@
                         checked
                         id="testnet"
                         type="radio"
-                        value=""
-                        name="bitcoin-network"
+                        value="test"
+                        formControlName="blockchain"
                         class="h-5 w-5 border-neutral-600 bg-neutral-700 text-amber-600 ring-offset-neutral-800 focus:ring-1 focus:ring-amber-600" />
                       <label for="testnet" class="ml-2 text-lg font-medium text-neutral-300">Testnet</label>
                     </div>
@@ -107,7 +110,8 @@
 
         <div class="bg-neutral-700 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
           <button
-            type="button"
+            type="submit"
+            (click)="createFormSubmit()"
             class="inline-flex w-full justify-center rounded-md bg-blue-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">
             Post tweet
           </button>

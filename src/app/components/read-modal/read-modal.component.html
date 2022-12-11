@@ -12,13 +12,13 @@
             <div class="mt-0 text-center sm:text-left">
               <h3 class="text-3xl font-bold leading-6 text-neutral-200" id="modal-title">Read Tweet</h3>
 
-              <form action="" class="mt-8 flex flex-col gap-4">
+              <form [formGroup]="readForm" action="" class="mt-8 flex flex-col gap-4">
                 <div>
-                  <label for="about" class="block text-xl font-medium text-neutral-300">Tweet reply URL/ID</label>
+                  <label for="tweet-id" class="block text-xl font-medium text-neutral-300">Tweet reply URL/ID</label>
                   <div class="mt-4">
                     <textarea
-                      id="about"
-                      name="about"
+                      id="tweet-id"
+                      formControlName="tweetId"
                       rows="5"
                       class="mt-1 block w-full rounded-md bg-neutral-700 p-2 text-neutral-300 placeholder-neutral-400 shadow-lg sm:text-sm"
                       placeholder="https://twitter.com/'username'/status/'id'"></textarea>
@@ -32,7 +32,8 @@
 
         <div class="bg-neutral-700 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
           <button
-            type="button"
+            type="submit"
+            (click)="readFormSubmit()"
             class="inline-flex w-full justify-center rounded-md bg-blue-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">
             Read secret
           </button>
