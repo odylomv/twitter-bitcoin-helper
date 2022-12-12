@@ -1,75 +1,52 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { map, Observable, shareReplay } from 'rxjs';
 import { TwitterService } from 'src/app/services/twitter.service';
+import { CreateModalComponent } from '../../components/create-modal/create-modal.component';
+import { LoginModalComponent } from '../../components/login-modal/login-modal.component';
+import { ReadModalComponent } from '../../components/read-modal/read-modal.component';
 
 @Component({
   selector: 'tbh-home',
+  standalone: true,
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  imports: [CommonModule, LoginModalComponent, CreateModalComponent, ReadModalComponent],
 })
 export class HomeComponent {
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.HandsetPortrait).pipe(
-    map(result => result.matches),
-    shareReplay()
-  );
+  authStatus: boolean = false;
 
-  image: any = null;
+  loginModalOpen = false;
+  createModalOpen = false;
+  readModalOpen = false;
 
-  hideForm = new FormGroup({
-    tweetSecret: new FormControl('', Validators.required),
-    imageMethod: new FormControl<'cat' | 'local'>('cat', Validators.required),
-    tweetImage: new FormControl(null),
-    tweetImageSource: new FormControl<File | null>(null),
-    blockchain: new FormControl<'main' | 'test'>('test', Validators.required),
-  });
-
-  retrieveForm = new FormGroup({
-    tweetId: new FormControl<string>('', Validators.required),
-  });
-
-  constructor(public twitterService: TwitterService, private breakpointObserver: BreakpointObserver) {}
-
-  async hideFormSubmit() {
-    console.log(this.hideForm);
-    if (
-      this.hideForm.controls.tweetSecret.value &&
-      (this.hideForm.controls.imageMethod.value || this.hideForm.controls.tweetImageSource.value)
-    ) {
-      const response = await this.twitterService.postTweet(
-        this.hideForm.controls.tweetSecret.value,
-        this.hideForm.controls.imageMethod.value ?? 'cat',
-        this.hideForm.controls.tweetImageSource.value,
-        this.hideForm.controls.blockchain.value ?? 'test'
-      );
-
-      this.retrieveForm.controls.tweetId.setValue(response.id);
-    }
+  constructor(public twitterService: TwitterService) {
+    twitterService.authStatus().subscribe(isAuthed => {
+      this.authStatus = isAuthed;
+    });
   }
 
-  onFileChange(event: any) {
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.hideForm.patchValue({
-        tweetImageSource: file,
-      });
-    }
-  }
+  setLoginModal = (open: boolean) => {
+    console.log('test');
+    this.loginModalOpen = open;
+  };
 
-  showPreview() {
-    if (this.image !== null) this.image = null;
-    else if (this.hideForm.controls.tweetImageSource.value) {
-      let reader = new FileReader();
-      reader.onload = e => (this.image = e.target?.result);
-      reader.readAsDataURL(this.hideForm.controls.tweetImageSource.value);
-    }
-  }
+  closeLoginModal = () => this.setLoginModal(false);
 
-  async retrieveFormSubmit() {
-    const id = this.retrieveForm.controls.tweetId.value;
-    if (id) {
-      await this.twitterService.searchTweet(id);
-    }
-  }
+  setCreateModal = (open: boolean) => {
+    if (!this.authStatus) return this.setLoginModal(true);
+
+    console.log('create');
+    this.createModalOpen = open;
+  };
+
+  closeCreateModal = () => this.setCreateModal(false);
+
+  setReadModal = (open: boolean) => {
+    if (!this.authStatus) return this.setLoginModal(true);
+
+    console.log('read');
+    this.readModalOpen = open;
+  };
+
+  closeReadModal = () => this.setReadModal(false);
 }

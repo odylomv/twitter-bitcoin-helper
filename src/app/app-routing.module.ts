@@ -3,17 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { TwitterGuard } from './guards/twitter.guard';
 
 const routes: Routes = [
-  // {
-  //     path: '',
-  //     loadChildren: () => import('./features/home/home.module').then(m => m.HomeModule),
-  //     canActivate: [TwitterGuard],
-  // },
   {
-    path: '',
-    loadComponent: () => import('./features/home-new/home-new.component').then(m => m.HomeNewComponent),
+    path: '**',
+    loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent),
     canActivate: [TwitterGuard],
   },
-  { path: '**', loadChildren: () => import('./features/home/home.module').then(m => m.HomeModule) },
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 
 @NgModule({
