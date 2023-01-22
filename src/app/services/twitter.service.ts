@@ -54,7 +54,11 @@ export class TwitterService {
     if (this.token !== undefined) return; // Token exists
 
     const postUrl = environment.serverUrl + '/twitter_token';
-    this.updateToken(await lastValueFrom(this.http.post<TwitterAccessToken>(postUrl, { url: window.location.href })));
+
+    const response = await lastValueFrom(this.http.post<TwitterTokenAndKey>(postUrl, { url: window.location.href }));
+    console.log(response);
+
+    this.updateToken(response.token);
     // Save token to session storage
     sessionStorage.setItem('access_token', JSON.stringify(this.token));
   }
@@ -96,6 +100,11 @@ interface TwitterAccessToken {
   readonly expires_in: number;
   readonly scope: Array<string>;
   readonly token_type: string;
+}
+
+interface TwitterTokenAndKey {
+  readonly token: TwitterAccessToken;
+  readonly key: string | undefined;
 }
 
 export interface Tweet {
