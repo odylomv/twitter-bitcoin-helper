@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   // serverUrl: 'http://127.0.0.1:5000',
-  serverUrl: 'https://sdg6.csd.auth.gr/twitter-bitcoin-api/',
+  serverUrl: 'https://sdg6.csd.auth.gr/twitter-bitcoin-api',
 };
 
 /*
