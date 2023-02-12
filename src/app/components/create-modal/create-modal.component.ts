@@ -16,6 +16,7 @@ export class CreateModalComponent {
 
   createForm = new FormGroup({
     tweetSecret: new FormControl('', Validators.required),
+    privateKey: new FormControl('', Validators.required),
     imageMethod: new FormControl<'cat' | 'local'>('cat', Validators.required),
     tweetImage: new FormControl(null),
     tweetImageSource: new FormControl<File | null>(null),
@@ -28,15 +29,19 @@ export class CreateModalComponent {
     console.log(this.createForm);
     if (
       this.createForm.controls.tweetSecret.value &&
+      this.createForm.controls.privateKey.value &&
       (this.createForm.controls.imageMethod.value || this.createForm.controls.tweetImageSource.value)
     ) {
       await this.twitterService.postTweet(
         this.createForm.controls.tweetSecret.value,
+        this.createForm.controls.privateKey.value,
         this.createForm.controls.imageMethod.value ?? 'cat',
         this.createForm.controls.tweetImageSource.value,
         this.createForm.controls.blockchain.value ?? 'test'
       );
     }
+
+    this.onClose();
   }
 
   onFileChange(event: any) {

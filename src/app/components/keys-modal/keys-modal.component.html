@@ -1,0 +1,59 @@
+<div (click)="onClose()" class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div class="fixed inset-0 bg-neutral-900 bg-opacity-75 transition-opacity"></div>
+
+  <div class="fixed inset-0 z-10 overflow-y-auto">
+    <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+      <!-- onClick event prevents closing the modal when clicking inside it -->
+      <div
+        (click)="$event.stopPropagation()"
+        class="relative transform overflow-hidden rounded-xl bg-neutral-800 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl">
+        <div class="bg-neutral-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div
+              class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-amber-500 sm:mx-0 sm:h-10 sm:w-10">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 text-white">
+                <path
+                  fill-rule="evenodd"
+                  d="M15.75 1.5a6.75 6.75 0 00-6.651 7.906c.067.39-.032.717-.221.906l-6.5 6.499a3 3 0 00-.878 2.121v2.818c0 .414.336.75.75.75H6a.75.75 0 00.75-.75v-1.5h1.5A.75.75 0 009 19.5V18h1.5a.75.75 0 00.53-.22l2.658-2.658c.19-.189.517-.288.906-.22A6.75 6.75 0 1015.75 1.5zm0 3a.75.75 0 000 1.5A2.25 2.25 0 0118 8.25a.75.75 0 001.5 0 3.75 3.75 0 00-3.75-3.75z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+              <h3 class="text-xl font-bold leading-6 text-neutral-300" id="modal-title">
+                Cryptographic keys generated
+              </h3>
+
+              <div class="mt-2">
+                <p class="text-sm text-neutral-400">
+                  Store the private key somewhere safe. <span class="font-bold italic">Never</span> share your private
+                  key with anyone. The public key is automatically sent to the server to be used as verification.
+                </p>
+
+                <div class="flex items-center justify-center gap-8 pt-4">
+                  <div>
+                    <p class="pb-2 text-lg text-neutral-300">Private Key</p>
+                    <textarea readonly id="priv_key" cols="40" rows="10">{{ privKey }}</textarea>
+                  </div>
+                  <div>
+                    <p class="pb-2 text-lg text-neutral-300">Public Key</p>
+                    <textarea readonly id="priv_key" cols="40" rows="10">{{ pubKey }}</textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-neutral-700 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+          <button
+            type="button"
+            (click)="onClose()"
+            class="inline-flex w-full justify-center rounded-md bg-amber-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">
+            Proceed
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

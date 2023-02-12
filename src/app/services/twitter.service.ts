@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, lastValueFrom, retry, Subscription, timer } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { EncryptionService } from './encryption.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ export class TwitterService {
   private lastTimer: Subscription | null = null;
   private authStatus$ = new BehaviorSubject(false);
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private encService: EncryptionService) {
     // Check if the access token was previously saved in session storage
     const tokenString = sessionStorage.getItem('access_token');
     if (tokenString) this.updateToken(JSON.parse(tokenString));
@@ -63,12 +64,52 @@ export class TwitterService {
     sessionStorage.setItem('access_token', JSON.stringify(this.token));
   }
 
-  async postTweet(secret: string, method: 'cat' | 'local', image: File | null, blockchain: 'main' | 'test') {
+  async sendPublicKey(key: string) {
     if (this.token === undefined) throw new Error('User not authorized');
+
+    const postUrl = environment.serverUrl + '/store_pub_key';
+
+    const response = await lastValueFrom(
+      this.http.post<TwitterTokenAndKey>(postUrl, { access_token: this.token.access_token, pub_key: key })
+    );
+    console.log(response);
+  }
+
+  async testVerify(message: string) {
+    if (this.token === undefined) throw new Error('User not authorized');
+
+    if (this.encService.lastKeys === null) throw new Error('DEBUG');
+
+    const postUrl = environment.serverUrl + '/test_verify';
+    const { hash, signature } = await this.encService.signMessage(this.encService.lastKeys.privateKey, message);
+    console.log({ hash: this.encService.bufferToHex(hash), signature: this.encService.bufferToHex(signature) });
+
+    const response = await lastValueFrom(
+      this.http.post<TwitterTokenAndKey>(postUrl, {
+        access_token: this.token.access_token,
+        message,
+        signature: this.encService.bufferToHex(signature),
+      })
+    );
+    console.log('Resp');
+    console.log(response);
+  }
+
+  async postTweet(
+    secret: string,
+    key: string,
+    method: 'cat' | 'local',
+    image: File | null,
+    blockchain: 'main' | 'test'
+  ) {
+    if (this.token === undefined) throw new Error('User not authorized');
+
+    const { signature } = await this.encService.signMessage(await this.encService.importSigningKey(key), secret);
 
     let formData = new FormData();
     formData.append('access_token', this.token.access_token);
     formData.append('tweet_secret', secret);
+    formData.append('signature', this.encService.bufferToHex(signature));
     formData.append('image_method', method);
     formData.append('blockchain', blockchain);
 

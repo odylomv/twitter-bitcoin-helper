@@ -43,6 +43,10 @@
       </a>
     </h2>
 
+    <button (click)="generateKeyPair()">Generate Keys</button>
+    <!-- <button (click)="testVerify()">Test Verify</button> -->
+    <!-- <button (click)="setKeysModal(true)">Generate Keys</button> -->
+
     <div
       class="min-h-72 flex w-screen max-w-lg flex-col items-center justify-evenly gap-2 py-8 px-4 md:max-w-3xl md:flex-row md:gap-4">
       <button
@@ -72,5 +76,6 @@
 </div>
 
 <tbh-login-modal *ngIf="loginModalOpen" [onClose]="closeLoginModal"></tbh-login-modal>
+<tbh-keys-modal *ngIf="keysModalOpen" [onClose]="closeKeysModal" [privKey]="privKey" [pubKey]="pubKey"></tbh-keys-modal>
 <tbh-create-modal *ngIf="createModalOpen" [onClose]="closeCreateModal"></tbh-create-modal>
 <tbh-read-modal *ngIf="readModalOpen" [onClose]="closeReadModal"></tbh-read-modal>

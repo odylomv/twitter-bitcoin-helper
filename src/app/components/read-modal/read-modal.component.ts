@@ -25,5 +25,7 @@ export class ReadModalComponent {
     if (id) {
       await this.twitterService.searchTweet(id);
     }
+
+    this.onClose();
   }
 }
